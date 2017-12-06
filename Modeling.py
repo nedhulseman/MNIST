@@ -41,18 +41,18 @@ knn_clf.fit(X_train, y_train)
 knn_clf.get_params()
 
 
-predictions=knn_clf.predict(X_test)
-accuracy=knn_clf.score(X_test, y_test)#96.5%
-print(predictions)
-mat=confusion_matrix(y_test, predictions)
-np.fill_diagonal(mat, 0)
+predictions=knn_clf.predict(X_test) #Predictions for test data
+accuracy=knn_clf.score(X_test, y_test) #Calculates the overall accuracy
+
+mat=confusion_matrix(y_test, predictions) #confusion matrix of predicted and actual values
+np.fill_diagonal(mat, 0) #Makes the diagonal 0 so that we can actually see what is happening with missclassifications
 plt.matshow(mat)
 plt.xlabel('Actual Labels')
 plt.ylabel('Predicted Labels')
 plt.title('Comparing Predictions and Actual Labels', y=1.08)
 plt.show()
 
-row_sums=confusion_matrix.sum(axis=1, keepdims=True)
+row_sums=confusion_matrix.sum(axis=1, keepdims=True) #uses percent accuracy instead of raw numbers
 normalized_confusion_matrix=confusion_matrix/row_sums
 np.fill_diagonal(normalized_confusion_matrix, 0)
 plt.matshow(normalized_confusion_matrix)
@@ -80,12 +80,12 @@ plt.show()
 
 
 
-pca=PCA(n_components=400)
-princomp=pca.fit(X_test)
+pca=PCA(n_components=400) #Creates PCA object
+princomp=pca.fit(X_test) #Calculates scores/loadings
 var_explained=np.cumsum(pca.explained_variance_ratio_)
 
 
-plt.plot(var_explained)
+plt.plot(var_explained) #plots variance explained by pc
 plt.ylabel('Variance Explained')
 plt.xlabel('Principal Components')
 plt.axhline(y=.95, color='r', ls='dotted', label='95%')
@@ -93,7 +93,7 @@ plt.show()
 #About 150 PCs explain 95% of the variance
 pca=PCA(n_components=150)
 train_princomp=pca.fit_transform(X_train)
-test_princomp=pca.transform(X_test)
+test_princomp=pca.transform(X_test) #Uses estimated scores to transform the test data
 
 knn_clf=KNeighborsClassifier(n_neighbors=1, weights='uniform')
 knn_clf.fit(train_princomp, y_train)
